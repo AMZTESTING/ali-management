@@ -5,7 +5,7 @@
   --color-accent: #f59e0b;
 }
 
-/* دعم RTL/LTR */
+/* RTL / LTR */
 html[dir="rtl"] body {
   direction: rtl;
 }
@@ -14,40 +14,57 @@ html[dir="ltr"] body {
   direction: ltr;
 }
 
-/* تحسينات عامة */
+/* General */
 * {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
 }
 
 body {
-  margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* Safari */
+  min-height: 100dvh;
+
+  /* Safe area */
+  padding: 0;
 }
 
-/* إخفاء شريط التمرير في السايدبار إلا عند الحاجة */
-.sidebar-scroll {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE/Edge */
+/* التطبيق الرئيسي */
+.app-shell {
+  width: 100%;
+  height: 100dvh;
+  min-height: 100dvh;
+
+  /* Safari safe area */
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
-.sidebar-scroll::-webkit-scrollbar {
-  width: 6px;
+/* منطقة المحتوى */
+.app-main {
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
 }
 
-.sidebar-scroll::-webkit-scrollbar-thumb {
-  background: transparent;
-  border-radius: 10px;
+/* Safari */
+@supports not (height: 100dvh) {
+  .app-shell {
+    height: 100vh;
+    min-height: 100vh;
+  }
 }
 
-.sidebar-scroll:hover::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-}
-
-.sidebar-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-
+/* Sidebar scrollbar */
 .sidebar-scroll {
   scrollbar-width: none;
   -ms-overflow-style: none;
