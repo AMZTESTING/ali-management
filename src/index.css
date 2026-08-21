@@ -14,57 +14,29 @@ html[dir="ltr"] body {
   direction: ltr;
 }
 
-/* General */
 * {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   box-sizing: border-box;
 }
 
-html,
-body,
-#root {
-  margin: 0;
-  padding: 0;
+html {
   width: 100%;
-  min-width: 100%;
-}
-
-/* مهم جداً لسفاري */
-html,
-body {
   min-height: 100%;
-  overflow: hidden;
 }
 
 body {
+  margin: 0;
+  width: 100%;
+  min-height: 100%;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-
-  /* منع Safari من إضافة سلوك لمس غريب */
-  -webkit-overflow-scrolling: touch;
 }
 
-/* ارتفاع التطبيق الحقيقي */
-.app-shell {
+/* نخلي Safari يتحكم بالـ viewport بشكل طبيعي */
+#root {
   width: 100%;
-  height: var(--app-height, 100dvh);
-  min-height: var(--app-height, 100dvh);
-
-  overflow: hidden;
-
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-/* منطقة الصفحات */
-.app-main {
-  min-height: 0;
-  height: 100%;
-  overflow-y: auto;
-  overflow-x: hidden;
-
-  -webkit-overflow-scrolling: touch;
-
-  overscroll-behavior-y: contain;
+  min-height: 100vh;
 }
 
 /* Sidebar scrollbar */
