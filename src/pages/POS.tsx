@@ -25,7 +25,7 @@ export default function POS() {
   const { i18n } = useTranslation()
   const isRTL = i18n.language === 'ar'
   const { 
-    products, discounts, settings, paymentMethods,
+    products, categories, discounts, settings, paymentMethods,
     addOrder, getNextOrderNumber, getActiveDiscounts, applyCoupon 
   } = useStore()
   
@@ -49,11 +49,16 @@ export default function POS() {
   const activeDiscounts = getActiveDiscounts()
   const activePaymentMethods = paymentMethods.filter(m => m.isActive)
 
-  const categories = [
+  // ✅ فئات ديناميكية من قاعدة البيانات
+  const categoryOptions = [
     { id: 'all', name: 'الكل', nameEn: 'All', icon: ShoppingCart },
-    { id: 'hot', name: 'مشروبات ساخنة', nameEn: 'Hot Drinks', icon: Coffee },
-    { id: 'cold', name: 'مشروبات باردة', nameEn: 'Cold Drinks', icon: IceCream },
-    { id: 'dessert', name: 'حلويات', nameEn: 'Desserts', icon: Cake },
+    ...categories.map(cat => {
+      let Icon = ShoppingCart
+      if (cat.icon === 'coffee' || cat.icon === 'hot') Icon = Coffee
+      else if (cat.icon === 'icecream' || cat.icon === 'cold') Icon = IceCream
+      else if (cat.icon === 'cake' || cat.icon === 'dessert') Icon = Cake
+      return { id: cat.id, name: cat.nameAr, nameEn: cat.name, icon: Icon }
+    })
   ]
 
   const filteredProducts = products.filter(product => {
@@ -269,9 +274,9 @@ export default function POS() {
             />
           </div>
 
-          {/* الفئات */}
+          {/* الفئات الديناميكية */}
           <div className="flex gap-2 overflow-x-auto pb-1">
-            {categories.map(cat => (
+            {categoryOptions.map(cat => (
               <button
                 key={cat.id}
                 onClick={() => setActiveCategory(cat.id)}
@@ -481,7 +486,7 @@ export default function POS() {
               </div>
             </div>
 
-            {/* الأزرار */}
+            {/* الأزرار - أصغر ومنع الالتفاف */}
             <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={holdOrder}
