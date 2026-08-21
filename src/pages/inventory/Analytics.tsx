@@ -114,15 +114,16 @@ export default function InventoryAnalytics() {
   const adjustmentPercentage = totalMovements > 0 ? Math.round((filteredMovements.filter(m => m.type === 'adjustment').length / totalMovements) * 100) : 0
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-4 sm:space-y-6 p-3 sm:p-6">
+      {/* العنوان */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-primary">{isRTL ? 'تحليلات المخزون' : 'Inventory Analytics'}</h1>
-          <p className="text-sm text-gray-500 mt-1">{isRTL ? 'نظرة شاملة على أداء المخزون' : 'Comprehensive inventory overview'}</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-primary">{isRTL ? 'تحليلات المخزون' : 'Inventory Analytics'}</h1>
+          <p className="text-xs sm:text-sm text-gray-500 mt-1">{isRTL ? 'نظرة شاملة على أداء المخزون' : 'Comprehensive inventory overview'}</p>
         </div>
         <button 
           onClick={() => setShowFilters(!showFilters)} 
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-colors ${
+          className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs sm:text-sm transition-colors ${
             showFilters ? 'bg-accent text-primary' : 'bg-white border border-gray-200'
           }`}
         >
@@ -131,86 +132,92 @@ export default function InventoryAnalytics() {
         </button>
       </div>
 
+      {/* الفلاتر */}
       {showFilters && (
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-          <div className="flex flex-col sm:flex-row gap-4 items-end">
-            <div className="flex-1">
-              <label className="block text-sm font-medium mb-1">{isRTL ? 'من تاريخ' : 'From Date'}</label>
+        <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm border border-gray-100">
+          <div className="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:gap-4 items-end">
+            <div>
+              <label className="block text-xs sm:text-sm font-medium mb-1">{isRTL ? 'من تاريخ' : 'From Date'}</label>
               <input 
                 type="date" 
                 value={dateFrom} 
                 onChange={(e) => setDateFrom(e.target.value)} 
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl outline-none text-sm"
+                className="w-full px-2 py-2 border border-gray-200 rounded-xl outline-none text-xs sm:text-sm"
               />
             </div>
-            <div className="flex-1">
-              <label className="block text-sm font-medium mb-1">{isRTL ? 'إلى تاريخ' : 'To Date'}</label>
+            <div>
+              <label className="block text-xs sm:text-sm font-medium mb-1">{isRTL ? 'إلى تاريخ' : 'To Date'}</label>
               <input 
                 type="date" 
                 value={dateTo} 
                 onChange={(e) => setDateTo(e.target.value)} 
-                className="w-full px-4 py-2.5 border border-gray-200 rounded-xl outline-none text-sm"
+                className="w-full px-2 py-2 border border-gray-200 rounded-xl outline-none text-xs sm:text-sm"
               />
             </div>
-            <button 
-              onClick={() => { setDateFrom(''); setDateTo('') }} 
-              className="px-4 py-2.5 bg-red-50 text-red-500 rounded-xl text-sm hover:bg-red-100 flex items-center gap-1"
-            >
-              <X className="w-4 h-4" />
-              {isRTL ? 'مسح' : 'Clear'}
-            </button>
+            <div className="col-span-2 sm:col-span-1">
+              <button 
+                onClick={() => { setDateFrom(''); setDateTo('') }} 
+                className="w-full sm:w-auto px-3 py-2 bg-red-50 text-red-500 rounded-xl text-xs sm:text-sm hover:bg-red-100 flex items-center justify-center gap-1"
+              >
+                <X className="w-3.5 h-3.5" />
+                {isRTL ? 'مسح' : 'Clear'}
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-5 text-white shadow-sm">
+      {/* البطاقات الإحصائية */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-3 sm:p-5 text-white shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-3xl font-bold">{totalIngredients}</p>
-              <p className="text-sm opacity-80 mt-1">{isRTL ? 'المكونات' : 'Ingredients'}</p>
+              <p className="text-xl sm:text-3xl font-bold">{totalIngredients}</p>
+              <p className="text-[10px] sm:text-sm opacity-80 mt-1">{isRTL ? 'المكونات' : 'Ingredients'}</p>
             </div>
-            <Package className="w-8 h-8 opacity-50" />
+            <Package className="w-6 h-6 sm:w-8 sm:h-8 opacity-50" />
           </div>
         </div>
         
-        <div className={`bg-gradient-to-br ${lowStockCount > 0 ? 'from-red-500 to-red-600' : 'from-green-500 to-green-600'} rounded-2xl p-5 text-white shadow-sm`}>
+        <div className={`bg-gradient-to-br ${lowStockCount > 0 ? 'from-red-500 to-red-600' : 'from-green-500 to-green-600'} rounded-2xl p-3 sm:p-5 text-white shadow-sm`}>
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-3xl font-bold">{lowStockCount}</p>
-              <p className="text-sm opacity-80 mt-1">{isRTL ? 'مخزون منخفض' : 'Low Stock'}</p>
+              <p className="text-xl sm:text-3xl font-bold">{lowStockCount}</p>
+              <p className="text-[10px] sm:text-sm opacity-80 mt-1">{isRTL ? 'مخزون منخفض' : 'Low Stock'}</p>
             </div>
-            <AlertTriangle className="w-8 h-8 opacity-50" />
+            <AlertTriangle className="w-6 h-6 sm:w-8 sm:h-8 opacity-50" />
           </div>
         </div>
         
-        <div className="bg-gradient-to-br from-accent to-amber-600 rounded-2xl p-5 text-white shadow-sm">
+        <div className="bg-gradient-to-br from-accent to-amber-600 rounded-2xl p-3 sm:p-5 text-white shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-3xl font-bold">{totalInventoryValue.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</p>
-              <p className="text-sm opacity-80 mt-1">{isRTL ? 'قيمة المخزون' : 'Inventory Value'}</p>
+              <p className="text-xl sm:text-3xl font-bold">{totalInventoryValue.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</p>
+              <p className="text-[10px] sm:text-sm opacity-80 mt-1">{isRTL ? 'قيمة المخزون' : 'Inventory Value'}</p>
             </div>
-            <DollarSign className="w-8 h-8 opacity-50" />
+            <DollarSign className="w-6 h-6 sm:w-8 sm:h-8 opacity-50" />
           </div>
         </div>
         
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 text-white shadow-sm">
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-3 sm:p-5 text-white shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-3xl font-bold">{totalPurchasesAmount.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</p>
-              <p className="text-sm opacity-80 mt-1">{isRTL ? 'المشتريات' : 'Purchases'}</p>
+              <p className="text-xl sm:text-3xl font-bold">{totalPurchasesAmount.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</p>
+              <p className="text-[10px] sm:text-sm opacity-80 mt-1">{isRTL ? 'المشتريات' : 'Purchases'}</p>
             </div>
-            <TrendingUp className="w-8 h-8 opacity-50" />
+            <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 opacity-50" />
           </div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h3 className="font-semibold text-gray-800 mb-4">{isRTL ? 'ملخص الحركة' : 'Movement Summary'}</h3>
+      {/* الملخصات الثلاث */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3 sm:gap-4">
+        {/* ملخص الحركة */}
+        <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+          <h3 className="font-semibold text-base sm:text-lg text-gray-800 mb-3">{isRTL ? 'ملخص الحركة' : 'Movement Summary'}</h3>
           
-          <div className="flex items-center justify-center mb-4">
-            <div className="relative w-40 h-40">
+          <div className="flex items-center justify-center mb-3">
+            <div className="relative w-32 h-32 sm:w-40 sm:h-40">
               <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                 <circle cx="50" cy="50" r="40" fill="none" stroke="#f3f4f6" strokeWidth="12" />
                 <circle 
@@ -233,56 +240,57 @@ export default function InventoryAnalytics() {
               </svg>
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center">
-                  <p className="text-2xl font-bold text-gray-800">{totalMovements}</p>
-                  <p className="text-xs text-gray-500">{isRTL ? 'حركة' : 'Movements'}</p>
+                  <p className="text-xl sm:text-2xl font-bold text-gray-800">{totalMovements}</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500">{isRTL ? 'حركة' : 'Movements'}</p>
                 </div>
               </div>
             </div>
           </div>
           
-          <div className="space-y-2">
-            <div className="flex items-center justify-between">
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-xs sm:text-sm">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-green-500"></span>
-                <span className="text-sm text-gray-600">{isRTL ? 'داخل' : 'In'}</span>
+                <span className="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+                <span className="text-gray-600">{isRTL ? 'داخل' : 'In'}</span>
               </div>
-              <span className="text-sm font-semibold">{inPercentage}%</span>
+              <span className="font-semibold">{inPercentage}%</span>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between text-xs sm:text-sm">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-red-500"></span>
-                <span className="text-sm text-gray-600">{isRTL ? 'خارج' : 'Out'}</span>
+                <span className="w-2.5 h-2.5 rounded-full bg-red-500"></span>
+                <span className="text-gray-600">{isRTL ? 'خارج' : 'Out'}</span>
               </div>
-              <span className="text-sm font-semibold">{outPercentage}%</span>
+              <span className="font-semibold">{outPercentage}%</span>
             </div>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between text-xs sm:text-sm">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-gray-400"></span>
-                <span className="text-sm text-gray-600">{isRTL ? 'تعديل' : 'Adjust'}</span>
+                <span className="w-2.5 h-2.5 rounded-full bg-gray-400"></span>
+                <span className="text-gray-600">{isRTL ? 'تعديل' : 'Adjust'}</span>
               </div>
-              <span className="text-sm font-semibold">{adjustmentPercentage}%</span>
+              <span className="font-semibold">{adjustmentPercentage}%</span>
             </div>
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-            <TrendingUp className="w-5 h-5 text-blue-500" />
+        {/* الأكثر حركة */}
+        <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+          <h3 className="font-semibold text-base sm:text-lg text-gray-800 mb-3 flex items-center gap-2">
+            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5 text-blue-500" />
             {isRTL ? 'الأكثر حركة' : 'Fast Moving'}
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {fastMovingIngredients.map((ing, index) => {
               const movementCount = getIngredientMovementCount(ing.id)
               const maxCount = Math.max(...fastMovingIngredients.map(i => getIngredientMovementCount(i.id)), 1)
               const percentage = Math.round((movementCount / maxCount) * 100)
               
               return (
-                <div key={ing.id} className="flex items-center gap-3">
-                  <span className="text-xs font-bold text-gray-400 w-5">{index + 1}</span>
+                <div key={ing.id} className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-[10px] sm:text-xs font-bold text-gray-400 w-4">{index + 1}</span>
                   <div className="flex-1">
                     <div className="flex justify-between mb-1">
-                      <span className="text-sm font-medium">{isRTL ? ing.nameAr : ing.name}</span>
-                      <span className="text-xs text-gray-500">{movementCount}</span>
+                      <span className="text-xs sm:text-sm font-medium">{isRTL ? ing.nameAr : ing.name}</span>
+                      <span className="text-[10px] sm:text-xs text-gray-500">{movementCount}</span>
                     </div>
                     <div className="h-1.5 bg-gray-100 rounded-full">
                       <div 
@@ -295,28 +303,29 @@ export default function InventoryAnalytics() {
               )
             })}
             {fastMovingIngredients.length === 0 && (
-              <p className="text-center text-gray-400 text-sm py-4">{isRTL ? 'لا توجد بيانات' : 'No data'}</p>
+              <p className="text-center text-gray-400 text-xs sm:text-sm py-4">{isRTL ? 'لا توجد بيانات' : 'No data'}</p>
             )}
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-            <Truck className="w-5 h-5 text-purple-500" />
+        {/* أفضل الموردين */}
+        <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+          <h3 className="font-semibold text-base sm:text-lg text-gray-800 mb-3 flex items-center gap-2">
+            <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-purple-500" />
             {isRTL ? 'أفضل الموردين' : 'Top Suppliers'}
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {topSuppliers.map((supplier: any, index: number) => {
               const maxAmount = Math.max(...topSuppliers.map((s: any) => s.amount), 1)
               const percentage = Math.round((supplier.amount / maxAmount) * 100)
               
               return (
-                <div key={supplier.id} className="flex items-center gap-3">
-                  <span className="text-xs font-bold text-gray-400 w-5">{index + 1}</span>
+                <div key={supplier.id} className="flex items-center gap-2 sm:gap-3">
+                  <span className="text-[10px] sm:text-xs font-bold text-gray-400 w-4">{index + 1}</span>
                   <div className="flex-1">
                     <div className="flex justify-between mb-1">
-                      <span className="text-sm font-medium">{supplier.name}</span>
-                      <span className="text-xs font-semibold text-accent">{supplier.amount.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</span>
+                      <span className="text-xs sm:text-sm font-medium">{supplier.name}</span>
+                      <span className="text-[10px] sm:text-xs font-semibold text-accent">{supplier.amount.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</span>
                     </div>
                     <div className="h-1.5 bg-gray-100 rounded-full">
                       <div 
@@ -324,34 +333,35 @@ export default function InventoryAnalytics() {
                         style={{ width: `${percentage}%` }}
                       ></div>
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">{supplier.count} {isRTL ? 'طلبات' : 'orders'}</p>
+                    <p className="text-[10px] sm:text-xs text-gray-400 mt-1">{supplier.count} {isRTL ? 'طلبات' : 'orders'}</p>
                   </div>
                 </div>
               )
             })}
             {topSuppliers.length === 0 && (
-              <p className="text-center text-gray-400 text-sm py-4">{isRTL ? 'لا توجد بيانات' : 'No data'}</p>
+              <p className="text-center text-gray-400 text-xs sm:text-sm py-4">{isRTL ? 'لا توجد بيانات' : 'No data'}</p>
             )}
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <h3 className="font-semibold text-gray-800 mb-4">{isRTL ? 'ملخص مشتريات المكونات' : 'Ingredients Purchases Summary'}</h3>
+      {/* جدول ملخص المشتريات */}
+      <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+        <h3 className="font-semibold text-base sm:text-lg text-gray-800 mb-3">{isRTL ? 'ملخص مشتريات المكونات' : 'Ingredients Purchases Summary'}</h3>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[600px]">
+          <table className="w-full min-w-[500px]">
             <thead>
               <tr className="bg-gray-50">
-                <th className={`py-3 px-4 text-xs font-semibold text-gray-500 ${isRTL ? 'text-right' : 'text-left'}`}>
+                <th className={`py-2.5 px-2.5 sm:py-3 sm:px-4 text-[11px] sm:text-xs font-semibold text-gray-500 ${isRTL ? 'text-right' : 'text-left'}`}>
                   {isRTL ? 'المكون' : 'Ingredient'}
                 </th>
-                <th className="py-3 px-4 text-xs font-semibold text-gray-500 text-center">
+                <th className="py-2.5 px-2.5 sm:py-3 sm:px-4 text-[11px] sm:text-xs font-semibold text-gray-500 text-center">
                   {isRTL ? 'الكمية المشتراة' : 'Purchased Qty'}
                 </th>
-                <th className="py-3 px-4 text-xs font-semibold text-gray-500 text-center">
+                <th className="py-2.5 px-2.5 sm:py-3 sm:px-4 text-[11px] sm:text-xs font-semibold text-gray-500 text-center">
                   {isRTL ? 'عدد الطلبات' : 'Orders'}
                 </th>
-                <th className={`py-3 px-4 text-xs font-semibold text-gray-500 ${isRTL ? 'text-right' : 'text-left'}`}>
+                <th className={`py-2.5 px-2.5 sm:py-3 sm:px-4 text-[11px] sm:text-xs font-semibold text-gray-500 ${isRTL ? 'text-right' : 'text-left'}`}>
                   {isRTL ? 'التكلفة الإجمالية' : 'Total Cost'}
                 </th>
               </tr>
@@ -361,23 +371,23 @@ export default function InventoryAnalytics() {
                 .filter(ing => ing.purchaseCount > 0)
                 .map(ing => (
                   <tr key={ing.id} className="hover:bg-gray-50">
-                    <td className={`py-3 px-4 ${isRTL ? 'text-right' : 'text-left'}`}>
-                      <span className="text-sm font-medium">{isRTL ? ing.nameAr : ing.name}</span>
+                    <td className={`py-2 px-2.5 sm:py-3 sm:px-4 ${isRTL ? 'text-right' : 'text-left'}`}>
+                      <span className="text-xs sm:text-sm font-medium">{isRTL ? ing.nameAr : ing.name}</span>
                     </td>
-                    <td className="py-3 px-4 text-center">
-                      <span className="text-sm">{ing.totalPurchased}</span>
+                    <td className="py-2 px-2.5 sm:py-3 sm:px-4 text-center">
+                      <span className="text-xs sm:text-sm">{ing.totalPurchased}</span>
                     </td>
-                    <td className="py-3 px-4 text-center">
-                      <span className="text-sm text-gray-500">{ing.purchaseCount}</span>
+                    <td className="py-2 px-2.5 sm:py-3 sm:px-4 text-center">
+                      <span className="text-xs sm:text-sm text-gray-500">{ing.purchaseCount}</span>
                     </td>
-                    <td className={`py-3 px-4 ${isRTL ? 'text-right' : 'text-left'}`}>
-                      <span className="text-sm font-semibold text-accent">{ing.totalCost.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</span>
+                    <td className={`py-2 px-2.5 sm:py-3 sm:px-4 ${isRTL ? 'text-right' : 'text-left'}`}>
+                      <span className="text-xs sm:text-sm font-semibold text-accent">{ing.totalCost.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</span>
                     </td>
                   </tr>
                 ))}
               {ingredientPurchaseSummary.filter(ing => ing.purchaseCount > 0).length === 0 && (
                 <tr>
-                  <td colSpan={4} className="py-8 text-center text-gray-400 text-sm">
+                  <td colSpan={4} className="py-8 text-center text-gray-400 text-xs sm:text-sm">
                     {isRTL ? 'لا توجد مشتريات' : 'No purchases'}
                   </td>
                 </tr>
@@ -387,49 +397,50 @@ export default function InventoryAnalytics() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-red-500" />
+      {/* مخزون منخفض والأكثر هدر */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+        <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+          <h3 className="font-semibold text-base sm:text-lg text-gray-800 mb-3 flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500" />
             {isRTL ? 'مخزون منخفض' : 'Low Stock'}
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {ingredients.filter(i => i.quantity <= i.minimumStock).map(ing => (
-              <div key={ing.id} className="flex items-center justify-between bg-red-50 rounded-xl p-3">
+              <div key={ing.id} className="flex items-center justify-between bg-red-50 rounded-xl p-2.5 sm:p-3">
                 <div>
-                  <p className="text-sm font-medium">{isRTL ? ing.nameAr : ing.name}</p>
-                  <p className="text-xs text-gray-500">{ing.quantity} / {ing.minimumStock}</p>
+                  <p className="text-xs sm:text-sm font-medium">{isRTL ? ing.nameAr : ing.name}</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500">{ing.quantity} / {ing.minimumStock}</p>
                 </div>
-                <span className="text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">
+                <span className="text-[10px] sm:text-xs bg-red-100 text-red-600 px-2 py-1 rounded-full">
                   {Math.round((ing.quantity / ing.minimumStock) * 100)}%
                 </span>
               </div>
             ))}
             {ingredients.filter(i => i.quantity <= i.minimumStock).length === 0 && (
-              <p className="text-center text-gray-400 text-sm py-4">{isRTL ? 'كل المكونات متوفرة' : 'All stocked'}</p>
+              <p className="text-center text-gray-400 text-xs sm:text-sm py-4">{isRTL ? 'كل المكونات متوفرة' : 'All stocked'}</p>
             )}
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h3 className="font-semibold text-gray-800 mb-4 flex items-center gap-2">
-            <Trash2 className="w-5 h-5 text-orange-500" />
+        <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+          <h3 className="font-semibold text-base sm:text-lg text-gray-800 mb-3 flex items-center gap-2">
+            <Trash2 className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500" />
             {isRTL ? 'الأكثر هدر' : 'Most Wasted'}
           </h3>
-          <div className="space-y-3">
+          <div className="space-y-2">
             {mostWastedIngredients.map(ing => (
-              <div key={ing.id} className="flex items-center justify-between bg-orange-50 rounded-xl p-3">
+              <div key={ing.id} className="flex items-center justify-between bg-orange-50 rounded-xl p-2.5 sm:p-3">
                 <div>
-                  <p className="text-sm font-medium">{isRTL ? ing.nameAr : ing.name}</p>
-                  <p className="text-xs text-gray-500">{ing.wastedQuantity} {isRTL ? 'وحدة مهدرة' : 'units wasted'}</p>
+                  <p className="text-xs sm:text-sm font-medium">{isRTL ? ing.nameAr : ing.name}</p>
+                  <p className="text-[10px] sm:text-xs text-gray-500">{ing.wastedQuantity} {isRTL ? 'وحدة مهدرة' : 'units wasted'}</p>
                 </div>
-                <span className="text-sm font-semibold text-orange-600">
+                <span className="text-xs sm:text-sm font-semibold text-orange-600">
                   {ing.wastedCost.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}
                 </span>
               </div>
             ))}
             {mostWastedIngredients.length === 0 && (
-              <p className="text-center text-gray-400 text-sm py-4">{isRTL ? 'لا يوجد هدر' : 'No waste'}</p>
+              <p className="text-center text-gray-400 text-xs sm:text-sm py-4">{isRTL ? 'لا يوجد هدر' : 'No waste'}</p>
             )}
           </div>
         </div>

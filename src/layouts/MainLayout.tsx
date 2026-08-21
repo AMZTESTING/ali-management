@@ -8,25 +8,22 @@ export default function MainLayout() {
 
   return (
     <div className="min-h-[100dvh] bg-gray-100">
-      
-      <div className="flex min-h-[100dvh]">
-        
-        <Sidebar
-          open={sidebarOpen}
-          onClose={() => setSidebarOpen(false)}
+
+      <Sidebar
+        open={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+      />
+
+      <div className="xl:ml-64 rtl:xl:mr-64 rtl:xl:ml-0">
+
+        <Header
+          onMenuClick={() => setSidebarOpen(true)}
         />
 
-        <div className="flex-1 min-w-0">
-          
-          <Header
-            onMenuClick={() => setSidebarOpen(true)}
-          />
+        <main className="p-4 md:p-6">
+          <Outlet />
+        </main>
 
-          <main className="p-4 md:p-6">
-            <Outlet />
-          </main>
-
-        </div>
       </div>
     </div>
   )

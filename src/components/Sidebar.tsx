@@ -117,8 +117,8 @@ export default function Sidebar({ open, onClose }: SidebarProps) {
           z-50
           bg-gradient-to-b from-primary to-[#1a2233] text-white flex flex-col
           transition-all duration-300 shrink-0
-          xl:static xl:z-auto
-          ${isRTL ? 'xl:right-auto' : 'xl:left-auto'}
+          xl:fixed
+${isRTL ? 'xl:right-0' : 'xl:left-0'}
           w-64
           ${open ? 'translate-x-0' : isRTL ? 'translate-x-full xl:translate-x-0' : '-translate-x-full xl:translate-x-0'}
           xl:w-64
