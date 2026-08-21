@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 import { useStore } from '../context/StoreContext'
-import { Bell, Search, X, AlertTriangle, Coffee, Menu } from 'lucide-react'
+import { Bell, Search, X, AlertTriangle, Coffee, Menu, Calculator, ShoppingCart } from 'lucide-react'
 
 interface NotificationItem {
   id: string
@@ -18,14 +19,26 @@ export default function Header({ onMenuClick }: HeaderProps) {
   const { i18n } = useTranslation()
   const isRTL = i18n.language === 'ar'
   const { currentUser, roles, orders, ingredients, products } = useStore()
+  const navigate = useNavigate()
 
   const [showNotifications, setShowNotifications] = useState(false)
+  const [showCalculator, setShowCalculator] = useState(false)
   const notificationRef = useRef<HTMLDivElement>(null)
+  const calculatorRef = useRef<HTMLDivElement>(null)
+
+  // ✅ إصلاح منطق الآلة الحاسبة
+  const [calcDisplay, setCalcDisplay] = useState('0')
+  const [calcPrevValue, setCalcPrevValue] = useState<number | null>(null)
+  const [calcOperation, setCalcOperation] = useState<string | null>(null)
+  const [waitingForOperand, setWaitingForOperand] = useState(false)
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
         setShowNotifications(false)
+      }
+      if (calculatorRef.current && !calculatorRef.current.contains(event.target as Node)) {
+        setShowCalculator(false)
       }
     }
     document.addEventListener('mousedown', handleClickOutside)
@@ -75,10 +88,70 @@ export default function Header({ onMenuClick }: HeaderProps) {
     }
   }
 
+  // ✅ دوال الآلة الحاسبة الصحيحة
+  const clearCalc = () => {
+    setCalcDisplay('0')
+    setCalcPrevValue(null)
+    setCalcOperation(null)
+    setWaitingForOperand(false)
+  }
+
+  const inputDigit = (digit: string) => {
+    if (waitingForOperand) {
+      setCalcDisplay(digit)
+      setWaitingForOperand(false)
+    } else {
+      setCalcDisplay(prev => prev === '0' ? digit : prev + digit)
+    }
+  }
+
+  const inputDot = () => {
+    if (waitingForOperand) {
+      setCalcDisplay('0.')
+      setWaitingForOperand(false)
+      return
+    }
+    if (!calcDisplay.includes('.')) {
+      setCalcDisplay(prev => prev + '.')
+    }
+  }
+
+  const performOperation = (nextOperation: string) => {
+    const currentValue = parseFloat(calcDisplay)
+    if (calcPrevValue === null) {
+      setCalcPrevValue(currentValue)
+    } else if (calcOperation) {
+      const result = calculate(calcPrevValue, currentValue, calcOperation)
+      setCalcDisplay(String(result))
+      setCalcPrevValue(result)
+    }
+    setWaitingForOperand(true)
+    setCalcOperation(nextOperation)
+  }
+
+  const calculate = (a: number, b: number, op: string) => {
+    switch (op) {
+      case '+': return a + b
+      case '-': return a - b
+      case '*': return a * b
+      case '/': return b !== 0 ? a / b : 0
+      default: return b
+    }
+  }
+
+  const handleEquals = () => {
+    if (calcPrevValue === null || !calcOperation) return
+    const current = parseFloat(calcDisplay)
+    const result = calculate(calcPrevValue, current, calcOperation)
+    setCalcDisplay(String(result))
+    setCalcPrevValue(null)
+    setCalcOperation(null)
+    setWaitingForOperand(true)
+  }
+
   return (
-    <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-3 flex items-center justify-between">
-      <div className="flex items-center gap-3 flex-1 max-w-md">
-        {/* ✅ تم تغيير md:hidden إلى xl:hidden ليعمل على الآيباد */}
+    <header className="bg-white border-b border-gray-200 px-4 md:px-6 py-3 flex items-center justify-between gap-2">
+      <div className="flex items-center gap-3 flex-1 max-w-md min-w-0">
         <button
           onClick={onMenuClick}
           className="xl:hidden p-2 hover:bg-gray-100 rounded-lg transition-colors"
@@ -94,7 +167,59 @@ export default function Header({ onMenuClick }: HeaderProps) {
         />
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-2 md:gap-3">
+        {/* زر POS مباشر */}
+        <button
+          onClick={() => navigate('/pos')}
+          className="p-2 hover:bg-gray-100 rounded-full transition-colors relative"
+          title={isRTL ? 'نقطة البيع' : 'POS'}
+        >
+          <ShoppingCart className="w-5 h-5 text-gray-600" />
+        </button>
+
+        {/* زر الآلة الحاسبة */}
+        <div className="relative" ref={calculatorRef}>
+          <button
+            onClick={() => setShowCalculator(!showCalculator)}
+            className="p-2 hover:bg-gray-100 rounded-full transition-colors relative"
+            title={isRTL ? 'آلة حاسبة' : 'Calculator'}
+          >
+            <Calculator className="w-5 h-5 text-gray-600" />
+          </button>
+
+          {showCalculator && (
+            <div
+              className={`absolute top-full mt-2 w-72 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-xl border border-gray-200 z-[60] p-4 ${
+                isRTL ? 'left-0' : 'right-0'
+              }`}
+            >
+              <div className="bg-gray-100 rounded-lg p-3 text-right mb-3">
+                <span className="text-2xl font-bold text-gray-800 block truncate">{calcDisplay}</span>
+              </div>
+              <div className="grid grid-cols-4 gap-2">
+                <button onClick={clearCalc} className="p-3 bg-red-50 text-red-600 rounded-lg font-bold">C</button>
+                <button onClick={() => performOperation('/')} className="p-3 bg-gray-50 rounded-lg font-bold">/</button>
+                <button onClick={() => performOperation('*')} className="p-3 bg-gray-50 rounded-lg font-bold">×</button>
+                <button onClick={() => performOperation('-')} className="p-3 bg-gray-50 rounded-lg font-bold">-</button>
+                <button onClick={() => inputDigit('7')} className="p-3 bg-white rounded-lg">7</button>
+                <button onClick={() => inputDigit('8')} className="p-3 bg-white rounded-lg">8</button>
+                <button onClick={() => inputDigit('9')} className="p-3 bg-white rounded-lg">9</button>
+                <button onClick={() => performOperation('+')} className="p-3 bg-gray-50 rounded-lg font-bold">+</button>
+                <button onClick={() => inputDigit('4')} className="p-3 bg-white rounded-lg">4</button>
+                <button onClick={() => inputDigit('5')} className="p-3 bg-white rounded-lg">5</button>
+                <button onClick={() => inputDigit('6')} className="p-3 bg-white rounded-lg">6</button>
+                <button onClick={handleEquals} className="p-3 bg-accent text-primary rounded-lg font-bold row-span-2">=</button>
+                <button onClick={() => inputDigit('1')} className="p-3 bg-white rounded-lg">1</button>
+                <button onClick={() => inputDigit('2')} className="p-3 bg-white rounded-lg">2</button>
+                <button onClick={() => inputDigit('3')} className="p-3 bg-white rounded-lg">3</button>
+                <button onClick={() => inputDigit('0')} className="p-3 bg-white rounded-lg col-span-2">0</button>
+                <button onClick={inputDot} className="p-3 bg-white rounded-lg">.</button>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* زر الإشعارات */}
         <div className="relative" ref={notificationRef}>
           <button
             onClick={() => setShowNotifications(!showNotifications)}
@@ -110,7 +235,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
 
           {showNotifications && (
             <div
-              className={`absolute mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-lg border border-gray-100 z-50 max-h-96 overflow-y-auto ${
+              className={`absolute top-full mt-2 w-80 max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-lg border border-gray-100 z-50 max-h-96 overflow-y-auto ${
                 isRTL ? 'left-0' : 'right-0'
               }`}
             >
