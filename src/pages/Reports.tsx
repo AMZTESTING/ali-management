@@ -165,15 +165,16 @@ export default function Reports() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+    <div className="space-y-4 sm:space-y-6 p-3 sm:p-6">
+      {/* العنوان */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-primary">{isRTL ? 'التقارير' : 'Reports'}</h1>
-          <p className="text-sm text-gray-500 mt-1">{isRTL ? 'تحليلات شاملة للأداء' : 'Comprehensive performance analytics'}</p>
+          <h1 className="text-xl sm:text-2xl font-bold text-primary">{isRTL ? 'التقارير' : 'Reports'}</h1>
+          <p className="text-xs sm:text-sm text-gray-500 mt-1">{isRTL ? 'تحليلات شاملة للأداء' : 'Comprehensive performance analytics'}</p>
         </div>
         <button 
           onClick={() => setShowFilters(!showFilters)} 
-          className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm transition-colors ${
+          className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs sm:text-sm transition-colors ${
             showFilters ? 'bg-accent text-primary' : 'bg-white border border-gray-200'
           }`}
         >
@@ -182,102 +183,119 @@ export default function Reports() {
         </button>
       </div>
 
+      {/* الفلاتر */}
       {showFilters && (
-        <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100">
-          <div className="flex flex-col sm:flex-row gap-4 items-end">
-            <div className="flex-1">
-              <label className="block text-sm font-medium mb-1">{isRTL ? 'من تاريخ' : 'From'}</label>
-              <input type="date" value={dateFrom} onChange={(e) => setDateFrom(e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl outline-none text-sm" />
+        <div className="bg-white rounded-2xl p-3 sm:p-4 shadow-sm border border-gray-100">
+          <div className="grid grid-cols-2 sm:flex sm:flex-row gap-2 sm:gap-4 items-end">
+            <div>
+              <label className="block text-xs sm:text-sm font-medium mb-1">{isRTL ? 'من تاريخ' : 'From'}</label>
+              <input 
+                type="date" 
+                value={dateFrom} 
+                onChange={(e) => setDateFrom(e.target.value)} 
+                className="w-full px-2 py-2 border border-gray-200 rounded-xl outline-none text-xs sm:text-sm" 
+              />
             </div>
-            <div className="flex-1">
-              <label className="block text-sm font-medium mb-1">{isRTL ? 'إلى تاريخ' : 'To'}</label>
-              <input type="date" value={dateTo} onChange={(e) => setDateTo(e.target.value)} className="w-full px-4 py-2.5 border border-gray-200 rounded-xl outline-none text-sm" />
+            <div>
+              <label className="block text-xs sm:text-sm font-medium mb-1">{isRTL ? 'إلى تاريخ' : 'To'}</label>
+              <input 
+                type="date" 
+                value={dateTo} 
+                onChange={(e) => setDateTo(e.target.value)} 
+                className="w-full px-2 py-2 border border-gray-200 rounded-xl outline-none text-xs sm:text-sm" 
+              />
             </div>
-            <button onClick={() => { setDateFrom(''); setDateTo('') }} className="px-4 py-2.5 bg-red-50 text-red-500 rounded-xl text-sm hover:bg-red-100 flex items-center gap-1">
-              <X className="w-4 h-4" />
-              {isRTL ? 'مسح' : 'Clear'}
-            </button>
+            <div className="col-span-2 sm:col-span-1">
+              <button 
+                onClick={() => { setDateFrom(''); setDateTo('') }} 
+                className="w-full sm:w-auto px-3 py-2 bg-red-50 text-red-500 rounded-xl text-xs sm:text-sm hover:bg-red-100 flex items-center justify-center gap-1"
+              >
+                <X className="w-3.5 h-3.5" />
+                {isRTL ? 'مسح' : 'Clear'}
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-5 text-white shadow-sm">
+      {/* البطاقات الإحصائية */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl p-3 sm:p-5 text-white shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              {/* ✅ عرض الإيرادات بثلاث خانات عشرية مع العملة */}
-              <p className="text-3xl font-bold">{totalRevenue.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</p>
-              <p className="text-sm opacity-80 mt-1">{isRTL ? 'الإيرادات' : 'Revenue'}</p>
+              <p className="text-xl sm:text-3xl font-bold">{totalRevenue.toFixed(3)}</p>
+              <p className="text-[10px] sm:text-sm opacity-80 mt-1">{isRTL ? 'الإيرادات' : 'Revenue'}</p>
             </div>
-            <DollarSign className="w-8 h-8 opacity-50" />
+            <DollarSign className="w-6 h-6 sm:w-8 sm:h-8 opacity-50" />
           </div>
         </div>
-        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-5 text-white shadow-sm">
+        <div className="bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl p-3 sm:p-5 text-white shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-3xl font-bold">{totalOrders}</p>
-              <p className="text-sm opacity-80 mt-1">{isRTL ? 'الطلبات' : 'Orders'}</p>
+              <p className="text-xl sm:text-3xl font-bold">{totalOrders}</p>
+              <p className="text-[10px] sm:text-sm opacity-80 mt-1">{isRTL ? 'الطلبات' : 'Orders'}</p>
             </div>
-            <ShoppingBag className="w-8 h-8 opacity-50" />
+            <ShoppingBag className="w-6 h-6 sm:w-8 sm:h-8 opacity-50" />
           </div>
         </div>
-        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-5 text-white shadow-sm">
+        <div className="bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl p-3 sm:p-5 text-white shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              {/* ✅ متوسط الطلب بثلاث خانات عشرية مع العملة */}
-              <p className="text-3xl font-bold">{averageOrderValue.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</p>
-              <p className="text-sm opacity-80 mt-1">{isRTL ? 'متوسط الطلب' : 'Avg Order'}</p>
+              <p className="text-xl sm:text-3xl font-bold">{averageOrderValue.toFixed(3)}</p>
+              <p className="text-[10px] sm:text-sm opacity-80 mt-1">{isRTL ? 'متوسط الطلب' : 'Avg Order'}</p>
             </div>
-            <TrendingUp className="w-8 h-8 opacity-50" />
+            <TrendingUp className="w-6 h-6 sm:w-8 sm:h-8 opacity-50" />
           </div>
         </div>
-        <div className="bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl p-5 text-white shadow-sm">
+        <div className="bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl p-3 sm:p-5 text-white shadow-sm">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-3xl font-bold">{totalItemsSold}</p>
-              <p className="text-sm opacity-80 mt-1">{isRTL ? 'عناصر مباعة' : 'Items Sold'}</p>
+              <p className="text-xl sm:text-3xl font-bold">{totalItemsSold}</p>
+              <p className="text-[10px] sm:text-sm opacity-80 mt-1">{isRTL ? 'عناصر مباعة' : 'Items Sold'}</p>
             </div>
-            <Zap className="w-8 h-8 opacity-50" />
+            <Zap className="w-6 h-6 sm:w-8 sm:h-8 opacity-50" />
           </div>
         </div>
       </div>
 
+      {/* التنبيهات */}
       {alerts.length > 0 && (
         <div className="space-y-2">
           {alerts.map((alert, index) => (
-            <div key={index} className={`flex items-center gap-3 p-4 rounded-2xl border ${alert.color}`}>
-              <alert.icon className="w-5 h-5 shrink-0" />
-              <p className="text-sm font-medium">{alert.message}</p>
+            <div key={index} className={`flex items-center gap-2 p-3 rounded-2xl border text-xs sm:text-sm ${alert.color}`}>
+              <alert.icon className="w-4 h-4 sm:w-5 sm:h-5 shrink-0" />
+              <p className="font-medium">{alert.message}</p>
             </div>
           ))}
         </div>
       )}
 
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <h2 className="font-semibold text-lg text-gray-800 mb-4 flex items-center gap-2">
-          <Clock className="w-5 h-5 text-accent" />
+      {/* المبيعات حسب الساعة */}
+      <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+        <h2 className="font-semibold text-base sm:text-lg text-gray-800 mb-3 flex items-center gap-2">
+          <Clock className="w-4 h-4 sm:w-5 sm:h-5 text-accent" />
           {isRTL ? 'المبيعات حسب الساعة' : 'Sales by Hour'}
         </h2>
-        <div className="flex items-end gap-1 h-40 overflow-x-auto pb-2">
+        <div className="flex items-end gap-1 h-32 sm:h-40 overflow-x-auto pb-2">
           {hourlySales.map((hourData) => (
-            <div key={hourData.hour} className="flex-1 min-w-[24px] flex flex-col items-center gap-1">
+            <div key={hourData.hour} className="flex-1 min-w-[20px] flex flex-col items-center gap-1">
               <div 
                 className={`w-full rounded-t-lg transition-all ${
                   peakHours.some(p => p.hour === hourData.hour) ? 'bg-accent' : 'bg-gray-200'
                 }`}
-                style={{ height: `${(hourData.count / maxHourlyCount) * 100}%`, minHeight: hourData.count > 0 ? '8px' : '2px' }}
+                style={{ height: `${(hourData.count / maxHourlyCount) * 100}%`, minHeight: hourData.count > 0 ? '6px' : '2px' }}
               ></div>
-              <span className="text-[10px] text-gray-400 whitespace-nowrap">
+              <span className="text-[8px] sm:text-[10px] text-gray-400 whitespace-nowrap">
                 {formatHour(hourData.hour)}
               </span>
             </div>
           ))}
         </div>
         {peakHours.length > 0 && (
-          <div className="mt-4 flex flex-wrap gap-2">
-            <span className="text-xs font-semibold text-gray-500">{isRTL ? 'أوقات الذروة:' : 'Peak Hours:'}</span>
+          <div className="mt-3 flex flex-wrap gap-1 sm:gap-2">
+            <span className="text-[10px] sm:text-xs font-semibold text-gray-500">{isRTL ? 'أوقات الذروة:' : 'Peak Hours:'}</span>
             {peakHours.map((peak) => (
-              <span key={peak.hour} className="text-xs bg-accent/10 text-accent px-3 py-1 rounded-full font-medium">
+              <span key={peak.hour} className="text-[10px] sm:text-xs bg-accent/10 text-accent px-2 py-1 rounded-full font-medium">
                 {formatHour(peak.hour)} - {peak.count} {isRTL ? 'طلب' : 'orders'}
               </span>
             ))}
@@ -285,103 +303,102 @@ export default function Reports() {
         )}
       </div>
 
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-        <h2 className="font-semibold text-lg text-gray-800 mb-4 flex items-center gap-2">
-          <Star className="w-5 h-5 text-yellow-500" />
+      {/* الأكثر مبيعًا */}
+      <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+        <h2 className="font-semibold text-base sm:text-lg text-gray-800 mb-3 flex items-center gap-2">
+          <Star className="w-4 h-4 sm:w-5 sm:h-5 text-yellow-500" />
           {isRTL ? 'الأكثر مبيعًا' : 'Best Sellers'}
         </h2>
-        <div className="space-y-3">
+        <div className="space-y-2">
           {bestSellers.map((product, index) => (
-            <div key={product.id} className="flex items-center gap-3">
-              <span className="text-xs font-bold text-gray-400 w-6">{index + 1}</span>
-              <div className="w-10 h-10 bg-primary/5 rounded-xl flex items-center justify-center shrink-0">
-                <Coffee className="w-5 h-5 text-primary" />
+            <div key={product.id} className="flex items-center gap-2 sm:gap-3">
+              <span className="text-[10px] sm:text-xs font-bold text-gray-400 w-4">{index + 1}</span>
+              <div className="w-8 h-8 sm:w-10 sm:h-10 bg-primary/5 rounded-xl flex items-center justify-center shrink-0">
+                <Coffee className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
               </div>
               <div className="flex-1">
                 <div className="flex justify-between mb-1">
-                  <span className="text-sm font-medium">{isRTL ? product.nameAr : product.name}</span>
-                  <span className="text-xs text-gray-500">{product.soldCount} {isRTL ? 'مباع' : 'sold'}</span>
+                  <span className="text-xs sm:text-sm font-medium">{isRTL ? product.nameAr : product.name}</span>
+                  <span className="text-[10px] sm:text-xs text-gray-500">{product.soldCount} {isRTL ? 'مباع' : 'sold'}</span>
                 </div>
-                <div className="h-2 bg-gray-100 rounded-full">
+                <div className="h-1.5 sm:h-2 bg-gray-100 rounded-full">
                   <div 
                     className="h-full bg-yellow-500 rounded-full transition-all"
                     style={{ width: `${(product.soldCount / maxSoldCount) * 100}%` }}
                   ></div>
                 </div>
-                {/* ✅ إيرادات المنتج بثلاث خانات عشرية مع العملة */}
-                <p className="text-xs text-accent mt-1">{product.revenue.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</p>
+                <p className="text-[10px] sm:text-xs text-accent mt-1">{product.revenue.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</p>
               </div>
             </div>
           ))}
           {bestSellers.length === 0 && (
-            <p className="text-center text-gray-400 text-sm py-6">{isRTL ? 'لا توجد مبيعات' : 'No sales yet'}</p>
+            <p className="text-center text-gray-400 text-xs sm:text-sm py-4">{isRTL ? 'لا توجد مبيعات' : 'No sales yet'}</p>
           )}
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h2 className="font-semibold text-lg text-gray-800 mb-4">{isRTL ? 'أداء الفئات' : 'Category Performance'}</h2>
-          <div className="space-y-3">
+      {/* أداء الفئات وتحليل طرق الدفع */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3 sm:gap-4">
+        <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+          <h2 className="font-semibold text-base sm:text-lg text-gray-800 mb-3">{isRTL ? 'أداء الفئات' : 'Category Performance'}</h2>
+          <div className="space-y-2">
             {categorySales.map(category => (
-              <div key={category.id} className="flex items-center gap-3">
-                <div className="p-2 bg-primary/5 rounded-xl">
-                  <Coffee className="w-5 h-5 text-primary" />
+              <div key={category.id} className="flex items-center gap-2 sm:gap-3">
+                <div className="p-1.5 sm:p-2 bg-primary/5 rounded-xl">
+                  <Coffee className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                 </div>
                 <div className="flex-1">
                   <div className="flex justify-between mb-1">
-                    <span className="text-sm font-medium">{isRTL ? category.nameAr : category.name}</span>
-                    {/* ✅ إيراد الفئة بثلاث خانات عشرية مع العملة */}
-                    <span className="text-xs font-semibold text-accent">{category.revenue.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</span>
+                    <span className="text-xs sm:text-sm font-medium">{isRTL ? category.nameAr : category.name}</span>
+                    <span className="text-[10px] sm:text-xs font-semibold text-accent">{category.revenue.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}</span>
                   </div>
-                  <div className="h-2 bg-gray-100 rounded-full">
+                  <div className="h-1.5 sm:h-2 bg-gray-100 rounded-full">
                     <div 
                       className="h-full bg-blue-500 rounded-full transition-all"
                       style={{ width: `${categorySales.length > 0 ? (category.revenue / Math.max(...categorySales.map(c => c.revenue), 1)) * 100 : 0}%` }}
                     ></div>
                   </div>
-                  <p className="text-xs text-gray-400 mt-1">{category.soldCount} {isRTL ? 'عنصر' : 'items'}</p>
+                  <p className="text-[10px] sm:text-xs text-gray-400 mt-1">{category.soldCount} {isRTL ? 'عنصر' : 'items'}</p>
                 </div>
               </div>
             ))}
             {categorySales.length === 0 && (
-              <p className="text-center text-gray-400 text-sm py-6">{isRTL ? 'لا توجد بيانات' : 'No data'}</p>
+              <p className="text-center text-gray-400 text-xs sm:text-sm py-4">{isRTL ? 'لا توجد بيانات' : 'No data'}</p>
             )}
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 shadow-sm border border-gray-100">
-          <h2 className="font-semibold text-lg text-gray-800 mb-4">{isRTL ? 'تحليل طرق الدفع' : 'Payment Analysis'}</h2>
-          <div className="space-y-3">
+        <div className="bg-white rounded-2xl p-3 sm:p-6 shadow-sm border border-gray-100">
+          <h2 className="font-semibold text-base sm:text-lg text-gray-800 mb-3">{isRTL ? 'تحليل طرق الدفع' : 'Payment Analysis'}</h2>
+          <div className="space-y-2">
             {paymentAnalysis.map(method => {
               const iconMap: Record<string, any> = { banknote: Banknote, 'credit-card': CreditCard, wallet: Wallet }
               const Icon = iconMap[method.icon] || Banknote
               return (
-                <div key={method.id} className="flex items-center gap-3">
-                  <div className="p-2 bg-primary/5 rounded-xl">
-                    <Icon className="w-5 h-5 text-primary" />
+                <div key={method.id} className="flex items-center gap-2 sm:gap-3">
+                  <div className="p-1.5 sm:p-2 bg-primary/5 rounded-xl">
+                    <Icon className="w-4 h-4 sm:w-5 sm:h-5 text-primary" />
                   </div>
                   <div className="flex-1">
                     <div className="flex justify-between mb-1">
-                      <span className="text-sm font-medium">{isRTL ? method.nameAr : method.name}</span>
-                      <span className="text-xs text-gray-500">{method.percentage}%</span>
+                      <span className="text-xs sm:text-sm font-medium">{isRTL ? method.nameAr : method.name}</span>
+                      <span className="text-[10px] sm:text-xs text-gray-500">{method.percentage}%</span>
                     </div>
-                    <div className="h-2 bg-gray-100 rounded-full">
+                    <div className="h-1.5 sm:h-2 bg-gray-100 rounded-full">
                       <div 
                         className="h-full bg-purple-500 rounded-full transition-all"
                         style={{ width: `${method.percentage}%` }}
                       ></div>
                     </div>
-                    <p className="text-xs text-gray-400 mt-1">
-                      {method.count} {isRTL ? 'معاملة' : 'transactions'} - {/* ✅ إيراد طريقة الدفع بثلاث خانات عشرية مع العملة */}
-                      {method.revenue.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}
+                    <p className="text-[10px] sm:text-xs text-gray-400 mt-1">
+                      {method.count} {isRTL ? 'معاملة' : 'transactions'} - {method.revenue.toFixed(3)} {isRTL ? 'ر.ع' : 'OMR'}
                     </p>
                   </div>
                 </div>
               )
             })}
             {paymentAnalysis.length === 0 && (
-              <p className="text-center text-gray-400 text-sm py-6">{isRTL ? 'لا توجد بيانات' : 'No data'}</p>
+              <p className="text-center text-gray-400 text-xs sm:text-sm py-4">{isRTL ? 'لا توجد بيانات' : 'No data'}</p>
             )}
           </div>
         </div>
